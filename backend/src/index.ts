@@ -4,11 +4,12 @@ import userController from "./controller/user-controller";
 import authController from "./controller/auth-controller";
 import projectController from "./controller/project-controller";
 import defineRelations from "./domain/relations";
-
+const cors = require("cors");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 
 // Middleware para parsear JSON
+app.use(cors());
 app.use(express.json());
 // Cargar relaciones
 defineRelations();

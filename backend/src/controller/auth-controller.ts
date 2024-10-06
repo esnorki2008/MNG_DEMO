@@ -10,7 +10,7 @@ const authService = new AuthService(userRepo);
 const router = Router();
 
 router.post(
-  "/",
+  "/login",
   handleError(async (req: Request, res: Response) => {
     const users = await authService.login(req.body);
     res.status(StatusCodes.OK).json(users);

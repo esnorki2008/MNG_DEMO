@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { login } from "../services/authService";
-import { useNavigate } from "react-router-dom";
+import { signup } from "../services/authService";
 import Cookies from "js-cookie";
-import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-const Login: React.FC = () => {
+const Signup: React.FC = () => {
   const navigate = useNavigate();
+  const [name, setName] = useState<string>("");
+  const [familyName, setFamilyName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -22,26 +23,59 @@ const Login: React.FC = () => {
     setError(null);
 
     try {
-      const result = await login(email, password);
+      const result = await signup({ name, familyName, email, password });
       if (result.authToken) {
         Cookies.set("authToken", result.authToken, { expires: 7 });
         console.log("Login successful, token stored in cookie.");
       }
-      toast.success("Login successful!");
-      navigate("/dashboard");
+      console.log("Signup successful", result);
     } catch (error) {
-      toast.error("Failed to login. Please try again.");
-      console.log(error);
+      setError("Failed to sign up. Please try again.");
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100 items-center justify-center p-4">
+    <div className="flex min-h-screen bg-gray-50 items-center justify-center p-4">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold text-center text-gray-900">
-          Sign in to your account
+          Create your account
         </h2>
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              First Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="John"
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <label
+              htmlFor="familyName"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="familyName"
+              value={familyName}
+              onChange={(e) => setFamilyName(e.target.value)}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="Doe"
+              required
+            />
+          </div>
           <div className="space-y-2">
             <label
               htmlFor="email"
@@ -55,7 +89,7 @@ const Login: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="you@example.com"
+              placeholder="john.doe@example.com"
               required
             />
           </div>
@@ -72,38 +106,15 @@ const Login: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="••••••••"
+              placeholder="P@ssw0rd123!"
               required
             />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember_me"
-                type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="remember_me"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                Remember me
-              </label>
-            </div>
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Forgot your password?
-              </a>
-            </div>
           </div>
           <button
             type="submit"
             className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Sign in
+            Sign Up
           </button>
         </form>
       </div>
@@ -111,4 +122,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Signup;
