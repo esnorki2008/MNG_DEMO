@@ -5,6 +5,7 @@ import {
   createProject,
   getProjectData,
   getProjectIssues,
+  updateStatusIssueInProject,
 } from "../services/projectService";
 import { CreateProject } from "../models/project";
 
@@ -81,6 +82,33 @@ export const useAssignIssueToProjectHook = () => {
     issueCreateLoading,
     issueCreateError,
     createProject,
+  };
+};
+
+export const useUpdateIssueToProjectHook = () => {
+  const [issueProjectUpdate, setProject] = useState<any | null>(null);
+  const [issueProjectUpdateLoading, setLoading] = useState<boolean>(false);
+  const [issueProjectUpdateError, setError] = useState<string | null>(null);
+
+  const updateIssueStatusProject = async (payload: any) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await updateStatusIssueInProject(payload);
+      setProject(data);
+    } catch (err) {
+      setError("Failed to create issue.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    issueProjectUpdate,
+    issueProjectUpdateLoading,
+    issueProjectUpdateError,
+    updateIssueStatusProject,
   };
 };
 

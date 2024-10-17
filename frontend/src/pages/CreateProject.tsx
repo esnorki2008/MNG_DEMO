@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { createProject } from "../services/projectService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

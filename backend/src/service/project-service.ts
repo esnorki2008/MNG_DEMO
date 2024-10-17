@@ -84,6 +84,9 @@ export default class ProjectService {
       issueId: issue.id,
       title: issue.title,
       description: issue.description,
+      status: issue.status,
+      type: issue.type,
+      dueDate: issue.dueDate,
       detail: issue.detail,
     }));
 

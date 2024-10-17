@@ -90,3 +90,18 @@ export const createIssueInProject = async (projectId: number, payload: any) => {
     throw error;
   }
 };
+
+export const updateStatusIssueInProject = async (payload: any) => {
+  try {
+    const authToken = Cookies.get("authToken");
+    const response = await axios.patch(`${baseUrl}/issue`, payload, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error assigning project:", error);
+    throw error;
+  }
+};
