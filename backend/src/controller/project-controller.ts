@@ -36,14 +36,40 @@ router.post(
 );
 
 router.get(
+  "/:id",
+  authenticate,
+  handleError(async (req: Request, res: Response) => {
+    const projectId = Number(req.params.id);
+    const data = {
+      projectId,
+    };
+    const projects = await projectService.get(data);
+    res.status(StatusCodes.OK).json(projects);
+  })
+);
+
+router.get(
   "/:id/assign",
   authenticate,
   handleError(async (req: Request, res: Response) => {
-    const userId = Number(req.params.id);
+    const projectId = Number(req.params.id);
     const data = {
-      projectId: userId,
+      projectId,
     };
     const projects = await projectService.getAllUsers(data);
+    res.status(StatusCodes.OK).json(projects);
+  })
+);
+
+router.get(
+  "/:id/issues",
+  authenticate,
+  handleError(async (req: Request, res: Response) => {
+    const projectId = Number(req.params.id);
+    const data = {
+      projectId,
+    };
+    const projects = await projectService.getAlIssues(data);
     res.status(StatusCodes.OK).json(projects);
   })
 );

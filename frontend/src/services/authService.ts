@@ -1,6 +1,7 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
-const baseUrl = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export const login = async (email: string, password: string) => {
   try {
@@ -12,6 +13,21 @@ export const login = async (email: string, password: string) => {
     return response.data;
   } catch (error) {
     console.error("Error during login:", error);
+    throw error;
+  }
+};
+
+export const validateSession = async () => {
+  try {
+    const authToken = Cookies.get("authToken");
+    const response = await axios.get(`${baseUrl}/auth`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error during :", error);
     throw error;
   }
 };

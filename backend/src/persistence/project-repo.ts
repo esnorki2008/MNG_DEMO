@@ -17,6 +17,7 @@ export default class ProjectRepo {
     const project = await Project.findByPk(id);
     return project;
   }
+
   async addUser(userId: number, projectId: number) {
     const project = await Project.findByPk(projectId);
     const user = await User.findByPk(userId);
@@ -24,6 +25,20 @@ export default class ProjectRepo {
       throw new Error("User or Project not found");
     }
     await project.addUser(user);
+  }
+
+  async getAlIssues(id: number) {
+    const project = await Project.findOne({
+      where: { id },
+      include: [
+        {
+          model: User,
+          as: "issues",
+          through: { attributes: [] },
+        },
+      ],
+    });
+    return project;
   }
 
   async getAllUsers(id: number) {

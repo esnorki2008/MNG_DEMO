@@ -3,6 +3,8 @@ import {
   AssignUserProjectServiceResponse,
   CreateProjectServiceParams,
   CreateProjectServiceResponse,
+  GetAllIssuesProjectServiceParams,
+  GetAllIssuesProjectServiceResponse,
   GetAllUsersProjectServiceParams,
   GetAllUsersProjectServiceResponse,
 } from "../infrastructure/dtos/project-dto";
@@ -29,12 +31,64 @@ export default class ProjectService {
         StatusCodes.CONFLICT
       );
     }
+
+    const user = await this.userRepo.getById(params.userId);
+    if (!user) {
+      throw new BusinessException(
+        "Usuario no encontrado",
+        StatusCodes.NOT_FOUND
+      );
+    }
+
+    await this.projectRepo.addUser(user.id, project.id);
+
     return {
       projectId: project.id,
       name: project.name,
       description: project.description,
       startDate: project.startDate,
       endDate: project.endDate,
+    };
+  }
+
+  async get(params: any) {
+    const project = await this.projectRepo.getById(params.projectId);
+    if (!project) {
+      throw new BusinessException(
+        "Proyecto no encontrado",
+        StatusCodes.NOT_FOUND
+      );
+    }
+
+    return {
+      id: project.id,
+      name: project.name,
+      description: project.description,
+      endDate: project.endDate,
+    };
+  }
+
+  async getAlIssues(
+    params: GetAllIssuesProjectServiceParams
+  ): Promise<GetAllIssuesProjectServiceResponse> {
+    const project = await this.projectRepo.getById(params.projectId);
+    if (!project) {
+      throw new BusinessException(
+        "Proyecto no encontrado",
+        StatusCodes.NOT_FOUND
+      );
+    }
+
+    const projectIssues = await project.getIssues();
+    const issues = projectIssues.map((issue) => ({
+      issueId: issue.id,
+      title: issue.title,
+      description: issue.description,
+      detail: issue.detail,
+    }));
+
+    return {
+      issues,
     };
   }
 

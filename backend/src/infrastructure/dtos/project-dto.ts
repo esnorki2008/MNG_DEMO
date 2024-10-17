@@ -1,4 +1,5 @@
 export interface CreateProjectServiceParams {
+  userId: number;
   name: string;
   description: string;
   startDate: Date;
@@ -20,6 +21,12 @@ export interface UserInfoProjectServiceRecord {
   email: string;
 }
 
+export interface IssuesProjectServiceRecord {
+  issueId: number;
+  title: string;
+  description: string;
+}
+
 export interface AssignUserProjectServiceParams {
   assigneeId: number;
   projectId: number;
@@ -36,4 +43,12 @@ export interface GetAllUsersProjectServiceParams {
 
 export interface GetAllUsersProjectServiceResponse {
   users: UserInfoProjectServiceRecord[];
+}
+
+export interface GetAllIssuesProjectServiceParams {
+  projectId: number;
+}
+
+export interface GetAllIssuesProjectServiceResponse {
+  issues: IssuesProjectServiceRecord[];
 }

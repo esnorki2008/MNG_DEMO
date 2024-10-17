@@ -1,6 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../../infrastructure/db-client";
 import User from "./user";
+import Issue from "./issue";
 
 class Project extends Model {
   public id!: number;
@@ -13,6 +14,7 @@ class Project extends Model {
 
   public addUser!: (user: User | number) => Promise<void>;
   public getUsers!: () => Promise<User[]>;
+  public getIssues!: () => Promise<Issue[]>;
 }
 
 Project.init(

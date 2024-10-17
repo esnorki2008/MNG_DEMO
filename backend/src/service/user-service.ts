@@ -5,6 +5,8 @@ import {
   GetDataUserSeviceResponse,
   GetProjectsUserSeviceParams,
   GetProjectsUserSeviceResponse,
+  GetUnassignUsersByProjectSeviceParams,
+  GetUnassignUsersByProjectSeviceResponse,
 } from "../infrastructure/dtos/user-dto";
 import { BusinessException } from "../infrastructure/errors";
 import { generateJWTToken } from "../infrastructure/jwt";
@@ -53,6 +55,7 @@ export default class UserSevice {
 
     const projects = userProjects.map((project) => ({
       projectId: project.id,
+      description: project.description,
       name: project.name,
     }));
 
@@ -77,5 +80,21 @@ export default class UserSevice {
       password: user.password,
       email: user.email,
     };
+  }
+
+  async getAllUnasignedUsers(
+    params: GetUnassignUsersByProjectSeviceParams
+  ): Promise<GetUnassignUsersByProjectSeviceResponse> {
+    const { projectId } = params;
+    const users = await this.userRepo.getAllUnassignedUsersByProject(projectId);
+
+    const unassignedUsers = users.map((user) => ({
+      userId: user.id,
+      name: user.name,
+      familyName: user.familyName,
+      password: user.password,
+      email: user.email,
+    }));
+    return { users: unassignedUsers };
   }
 }

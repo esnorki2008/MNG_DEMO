@@ -19,6 +19,21 @@ router.get(
 );
 
 router.get(
+  "/unassigned/project/:id",
+  authenticate,
+  handleError(async (req: Request, res: Response) => {
+    const projectId = req.params.id;
+    const data = {
+      ...req.body,
+      projectId,
+    };
+
+    const users = await userService.getAllUnasignedUsers(data);
+    res.json(users);
+  })
+);
+
+router.get(
   "/projects",
   authenticate,
   handleError(async (req: Request, res: Response) => {

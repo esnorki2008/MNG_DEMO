@@ -12,6 +12,7 @@ export interface CreateUserServiceResponse {
 export interface ProjectsUserSevice {
   projectId: number;
   name: string;
+  description: string;
 }
 
 export interface GetProjectsUserSeviceParams {
@@ -31,4 +32,20 @@ export interface GetDataUserSeviceResponse {
   familyName: string;
   password: string;
   email: string;
+}
+
+export interface GetUnassignUsersByProjectSeviceItem {
+  userId: number;
+  name: string;
+  familyName: string;
+  password: string;
+  email: string;
+}
+
+export interface GetUnassignUsersByProjectSeviceParams {
+  projectId: number;
+}
+
+export interface GetUnassignUsersByProjectSeviceResponse {
+  users: GetUnassignUsersByProjectSeviceItem[];
 }

@@ -1,13 +1,10 @@
 import {
   LoginAuthServiceParams,
   LoginAuthServiceResponse,
+  ValidateAuthServiceParams,
+  ValidateAuthServiceResponse,
 } from "../infrastructure/dtos/auth-dto";
-import {
-  CreateUserServiceParams,
-  CreateUserServiceResponse,
-  GetDataUserSeviceParams,
-  GetDataUserSeviceResponse,
-} from "../infrastructure/dtos/user-dto";
+
 import { BusinessException } from "../infrastructure/errors";
 import { generateJWTToken } from "../infrastructure/jwt";
 import { StatusCodes } from "../infrastructure/status-codes";
@@ -33,6 +30,18 @@ export default class AuthService {
     }
     const authToken = generateJWTToken({
       userId: user.id,
+    });
+    return {
+      authToken,
+    };
+  }
+
+  async validate(
+    params: ValidateAuthServiceParams
+  ): Promise<ValidateAuthServiceResponse> {
+    const { userId } = params;
+    const authToken = generateJWTToken({
+      userId: userId,
     });
     return {
       authToken,

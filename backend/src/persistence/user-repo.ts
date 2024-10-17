@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import Project from "../domain/entities/project";
 import User from "../domain/entities/user";
 
@@ -49,5 +50,25 @@ export default class UserRepo {
       ],
     });
     return user;
+  }
+
+  async getAllUnassignedUsersByProject(projectId: number) {
+    const unassignedUsers = await User.findAll({
+      include: [
+        {
+          model: Project,
+          required: false,
+          where: {
+            id: projectId,
+          },
+          through: { attributes: [] },
+        },
+      ],
+      where: {
+        "$Projects.id$": { [Op.is]: null },
+      },
+    });
+
+    return unassignedUsers;
   }
 }

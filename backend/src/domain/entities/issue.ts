@@ -8,8 +8,12 @@ class Issue extends Model {
   public description!: string;
   public status!: string;
   public projectId!: number;
+  public dueDate!: Date;
+  public type!: string;
   public parentIssueId!: number | null;
   public dependsOnIssueId!: number | null;
+  public changes!: object[];
+  public detail!: object;
 }
 Issue.init(
   {
@@ -22,6 +26,18 @@ Issue.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    changes: {
+      type: DataTypes.JSON,
+      allowNull: false,
+    },
+    detail: {
+      type: DataTypes.JSON,
+      allowNull: false,
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
@@ -30,6 +46,10 @@ Issue.init(
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "open",
+    },
+    dueDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
     projectId: {
       type: DataTypes.INTEGER,
