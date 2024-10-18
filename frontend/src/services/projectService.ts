@@ -91,6 +91,40 @@ export const createIssueInProject = async (projectId: number, payload: any) => {
   }
 };
 
+export const createAttachmentIssue = async (issueId: number, payload: any) => {
+  try {
+    const authToken = Cookies.get("authToken");
+    const response = await axios.post(
+      `${baseUrl}/issue/${issueId}/attachment`,
+      { ...payload },
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating attachment:", error);
+    throw error;
+  }
+};
+
+export const getIssue = async (issueId: number) => {
+  try {
+    const authToken = Cookies.get("authToken");
+    const response = await axios.get(`${baseUrl}/issue/${issueId}`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error assigning project:", error);
+    throw error;
+  }
+};
+
 export const updateStatusIssueInProject = async (payload: any) => {
   try {
     const authToken = Cookies.get("authToken");

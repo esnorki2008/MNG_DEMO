@@ -54,7 +54,7 @@ const ProjectDetails = () => {
             <ul className="space-y-4 mt-4">
               {projectIssues.issues.map((issue: any, index: number) => (
                 <li
-                  onClick={() => navigate(`/issue/${id}/board`)}
+                  onClick={() => navigate(`/issue/${issue.issueId} `)}
                   key={index}
                   className="cursor-default hover:cursor-pointer bg-white p-4 rounded-lg shadow-md border border-gray-200"
                 >

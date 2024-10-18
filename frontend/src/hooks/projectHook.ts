@@ -112,6 +112,29 @@ export const useUpdateIssueToProjectHook = () => {
   };
 };
 
+export const useIssueData = (issueId: number) => {
+  const [issueData, setState] = useState<any | null>(null);
+  const [issueDataLoading, setLoading] = useState<boolean>(true);
+  const [issueDataError, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const data = await getProjectData(issueId);
+        setState(data);
+      } catch (err) {
+        setError("Failed to fetch .");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetch();
+  }, []);
+
+  return { issueData, issueDataLoading, issueDataError };
+};
+
 export const useProjectDataHook = (projectId: number) => {
   const [projectData, setState] = useState<any | null>(null);
   const [projectDataLoading, setLoading] = useState<boolean>(true);

@@ -53,13 +53,24 @@ export default class UserSevice {
     }
     const userProjects = await user.getProjects();
 
-    const projects = userProjects.map((project) => ({
-      projectId: project.id,
-      description: project.description,
-      name: project.name,
-    }));
+    const response = [];
+    for (const project of userProjects) {
+      const issues = await project.getIssues();
+      const mappedIssues = issues.map((issue) => ({
+        title: issue.title,
+        status: issue.status,
+      }));
+      const mappedProject = {
+        projectId: project.id,
+        dueDate: project.endDate,
+        description: project.description,
+        name: project.name,
+        issues: mappedIssues,
+      };
+      response.push(mappedProject);
+    }
 
-    return { projects };
+    return { projects: response };
   }
 
   async get(

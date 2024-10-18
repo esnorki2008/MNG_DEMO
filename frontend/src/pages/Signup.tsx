@@ -29,6 +29,7 @@ const Signup: React.FC = () => {
         console.log("Login successful, token stored in cookie.");
       }
       console.log("Signup successful", result);
+      navigate("/dashboard");
     } catch (error) {
       setError("Failed to sign up. Please try again.");
     }
@@ -117,6 +118,17 @@ const Signup: React.FC = () => {
             Sign Up
           </button>
         </form>
+
+        {/* Botón para ir a la página de login */}
+        <div className="text-center mt-4">
+          <p className="text-sm text-gray-600">Already have an account?</p>
+          <button
+            onClick={() => navigate("/login")}
+            className="mt-2 py-2 px-4 bg-indigo-500 text-white font-semibold rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Log in
+          </button>
+        </div>
       </div>
     </div>
   );

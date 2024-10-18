@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import SmallCard from "../components/SmallCard";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useProjectIssuesHook,
   useUpdateIssueToProjectHook,
 } from "../hooks/projectHook";
 import Loading from "../components/Loading";
 import { toast } from "react-toastify";
+import MenuBar from "../components/MenuBar";
+import { faTasks } from "@fortawesome/free-solid-svg-icons";
 
 const Board: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [data, setData] = useState<any>({
     tasks: [],
@@ -48,6 +51,13 @@ const Board: React.FC = () => {
 
   const { updateIssueStatusProject } = useUpdateIssueToProjectHook();
 
+  const items = [
+    {
+      handler: `/`,
+      title: "Back to Home",
+      icon: faTasks,
+    },
+  ];
   const mapColors = (status: string) => {
     switch (status) {
       case "open":
@@ -119,60 +129,66 @@ const Board: React.FC = () => {
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex space-x-4 p-8 bg-gray-100 min-h-[50vh] overflow-x-auto select-none">
-        {data.columnOrder.map((columnId: string) => {
-          const column = data.columns[columnId];
+    <div>
+      <MenuBar title="Issue Details" items={items} />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="flex space-x-4 p-8 bg-gray-100 min-h-[50vh] overflow-x-auto select-none">
+          {data.columnOrder.map((columnId: string) => {
+            const column = data.columns[columnId];
 
-          const tasks = data.tasks.filter(
-            (task: any) => task.status === column.status
-          );
+            const tasks = data.tasks.filter(
+              (task: any) => task.status === column.status
+            );
 
-          return (
-            <div
-              key={column.id}
-              className="bg-white rounded-md shadow-md p-4 w-2/3"
-            >
-              <h2 className="text-xl font-bold text-center mb-4">
-                {column.title}
-              </h2>
-              <Droppable droppableId={column.id}>
-                {(provided) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className="space-y-2 min-h-[100px]"
-                  >
-                    {tasks.map((task: any, index: any) => (
-                      <Draggable
-                        key={`k${task.issueId}`}
-                        draggableId={`k${task.issueId}`}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <SmallCard
-                              title={task.title}
-                              description={task.description}
-                              color={mapColors(task.status)}
-                            ></SmallCard>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </div>
-          );
-        })}
-      </div>
-    </DragDropContext>
+            return (
+              <div
+                key={column.id}
+                className="bg-white rounded-md shadow-md p-4 w-2/3"
+              >
+                <h2 className="text-xl font-bold text-center mb-4">
+                  {column.title}
+                </h2>
+                <Droppable droppableId={column.id}>
+                  {(provided) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className="space-y-2 min-h-[100px]"
+                    >
+                      {tasks.map((task: any, index: any) => (
+                        <Draggable
+                          key={`k${task.issueId}`}
+                          draggableId={`k${task.issueId}`}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <SmallCard
+                                title={task.title}
+                                description={task.description}
+                                color={mapColors(task.status)}
+                                onClick={() =>
+                                  navigate(`/issue/${task.issueId}`)
+                                }
+                              ></SmallCard>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            );
+          })}
+        </div>
+      </DragDropContext>
+    </div>
   );
 };
 

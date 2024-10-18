@@ -8,6 +8,7 @@ interface UserProject {
   projectId: number;
   name: string;
   description: string;
+  issues: any[];
 }
 
 export interface UserProjects {

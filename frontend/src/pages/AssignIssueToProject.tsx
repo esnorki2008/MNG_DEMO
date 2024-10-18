@@ -16,6 +16,7 @@ const AssignIssueToProject: React.FC = () => {
     type: "",
     dueDate: "",
     detail: {
+      attachments: [],
       testcase: [],
       testscenary: [],
       datatest: [],

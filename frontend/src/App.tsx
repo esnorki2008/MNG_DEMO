@@ -17,6 +17,7 @@ import AssignUserToProject from "./pages/AssignUserToProject";
 import Project from "./pages/Project";
 import AssignIssueToProject from "./pages/AssignIssueToProject";
 import Board from "./pages/Board";
+import Issue from "./pages/Issue";
 
 const App: React.FC = () => {
   return (
@@ -24,6 +25,14 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/issue/:id"
+          element={
+            <ProtectedRoute>
+              <Issue />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/project/:id"
           element={

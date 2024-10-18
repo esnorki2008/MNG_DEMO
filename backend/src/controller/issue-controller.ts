@@ -28,4 +28,22 @@ router.patch(
   })
 );
 
+router.get(
+  "/:id",
+  handleError(async (req: Request, res: Response) => {
+    const issueId = Number(req.params.id);
+    const users = await issueService.get(issueId);
+    res.status(StatusCodes.OK).json(users);
+  })
+);
+router.post(
+  "/:id/attachment",
+  handleError(async (req: Request, res: Response) => {
+    const issueId = Number(req.params.id);
+    const payload = { ...req.body, issueId };
+    const attachmentUrl = await issueService.attachment(payload);
+    res.status(StatusCodes.OK).json(attachmentUrl);
+  })
+);
+
 export default router;

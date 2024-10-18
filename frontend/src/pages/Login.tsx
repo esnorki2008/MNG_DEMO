@@ -25,13 +25,11 @@ const Login: React.FC = () => {
       const result = await login(email, password);
       if (result.authToken) {
         Cookies.set("authToken", result.authToken, { expires: 7 });
-        console.log("Login successful, token stored in cookie.");
       }
       toast.success("Login successful!");
       navigate("/dashboard");
     } catch (error) {
       toast.error("Failed to login. Please try again.");
-      console.log(error);
     }
   };
 
@@ -106,6 +104,16 @@ const Login: React.FC = () => {
             Sign in
           </button>
         </form>
+
+        <div className="text-center mt-4">
+          <p className="text-sm text-gray-600">Don't have an account?</p>
+          <button
+            onClick={() => navigate("/signup")}
+            className="mt-2 py-2 px-4 bg-indigo-500 text-white font-semibold rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Sign up
+          </button>
+        </div>
       </div>
     </div>
   );
