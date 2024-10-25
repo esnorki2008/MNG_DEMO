@@ -76,8 +76,6 @@ const AssignUserToProject: React.FC = () => {
             onChange={(e) => {
               const userId =
                 e.target.value !== "" ? parseInt(e.target.value) : "";
-              console.log({ userId });
-
               setSelectedUser(userId);
             }}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"

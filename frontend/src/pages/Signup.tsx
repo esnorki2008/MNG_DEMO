@@ -26,10 +26,7 @@ const Signup: React.FC = () => {
       const result = await signup({ name, familyName, email, password });
       if (result.authToken) {
         Cookies.set("authToken", result.authToken, { expires: 7 });
-        console.log("Login successful, token stored in cookie.");
       }
-      console.log("Signup successful", result);
-      navigate("/dashboard");
     } catch (error) {
       setError("Failed to sign up. Please try again.");
     }

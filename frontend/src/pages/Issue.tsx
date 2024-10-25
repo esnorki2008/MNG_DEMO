@@ -52,8 +52,6 @@ const Issue = () => {
     const fetchIssueData = async () => {
       try {
         const response = await getIssue(Number(id));
-        console.log(response);
-
         setIssueData(response);
         setAttachments(response.detail.attachments);
       } catch (error) {

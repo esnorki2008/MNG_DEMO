@@ -8,8 +8,6 @@ export function handleError(
     try {
       await fn(req, res, next);
     } catch (error) {
-      console.log({ error });
-
       if (error instanceof BusinessException) {
         res.status(error.statusCode).json({ message: error.message });
       } else {

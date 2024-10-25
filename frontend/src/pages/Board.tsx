@@ -117,8 +117,6 @@ const Board: React.FC = () => {
 
     try {
       const payload = { ...cardObject, projectId: Number(id) ?? 0 };
-
-      console.log({ payload });
       await updateIssueStatusProject(payload);
       toast.success("Issue updated successfully!");
     } catch (error) {

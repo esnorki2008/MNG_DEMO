@@ -23,12 +23,6 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Bienvenido a la API de Usuarios");
 });
 
-console.log({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
-});
-
 sequelize.sync({ force: false }).then(() => {
   app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
