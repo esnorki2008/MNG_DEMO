@@ -27,6 +27,7 @@ const Signup: React.FC = () => {
       if (result.authToken) {
         Cookies.set("authToken", result.authToken, { expires: 7 });
       }
+      navigate("/dashboard");
     } catch (error) {
       setError("Failed to sign up. Please try again.");
     }
