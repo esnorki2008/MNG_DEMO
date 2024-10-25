@@ -1,0 +1,76 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=mysql://user:password@mysql:3306/mydatabase
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - mynetwork
+    volumes:
+      - ./backend:/usr/src/app
+    command: npm run dev
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - mynetwork
+    volumes:
+      - ./frontend:/usr/src/app
+    command: npm start
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    networks:
+      - mynetwork
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  mysql_data:

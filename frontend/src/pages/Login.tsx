@@ -1,35 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { login } from "../services/authService";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
-import { toast } from "react-toastify";
+import { login } from "../services/authService"; // Importamos el servicio de autenticación.
+import { useNavigate } from "react-router-dom"; // Hook para la navegación.
+import Cookies from "js-cookie"; // Biblioteca para manejar cookies.
+import { toast } from "react-toastify"; // Biblioteca para mostrar notificaciones.
 
 const Login: React.FC = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate(); // Hook para la navegación.
+  const [email, setEmail] = useState<string>(""); // Estado para el email.
+  const [password, setPassword] = useState<string>(""); // Estado para la contraseña.
+  const [error, setError] = useState<string | null>(null); // Estado para los errores.
 
+  // Efecto para redirigir al dashboard si el usuario ya está autenticado.
   useEffect(() => {
     const authToken = Cookies.get("authToken");
     if (authToken) {
-      navigate("/dashboard");
+      navigate("/dashboard"); // Redirigimos al dashboard si ya existe el token de autenticación.
     }
   }, [navigate]);
 
+  // Manejador para el envío del formulario.
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
+    setError(null); // Reiniciamos el estado de error.
 
     try {
-      const result = await login(email, password);
+      const result = await login(email, password); // Llamamos al servicio de login.
       if (result.authToken) {
-        Cookies.set("authToken", result.authToken, { expires: 7 });
+        Cookies.set("authToken", result.authToken, { expires: 7 }); // Guardamos el token en las cookies.
       }
-      toast.success("Login successful!");
-      navigate("/dashboard");
+      toast.success("Login successful!"); // Mostramos mensaje de éxito.
+      navigate("/dashboard"); // Redirigimos al dashboard.
     } catch (error) {
-      toast.error("Failed to login. Please try again.");
+      toast.error("Failed to login. Please try again."); // Mostramos mensaje de error.
     }
   };
 
@@ -39,6 +41,7 @@ const Login: React.FC = () => {
         <h2 className="text-3xl font-bold text-center text-gray-900">
           Sign in to your account
         </h2>
+        {/* Formulario de inicio de sesión */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <label
@@ -51,7 +54,7 @@ const Login: React.FC = () => {
               type="email"
               id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)} // Actualizamos el estado del email.
               className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               placeholder="you@example.com"
               required
@@ -68,7 +71,7 @@ const Login: React.FC = () => {
               type="password"
               id="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)} // Actualizamos el estado de la contraseña.
               className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               placeholder="••••••••"
               required
@@ -105,10 +108,11 @@ const Login: React.FC = () => {
           </button>
         </form>
 
+        {/* Sección para crear una nueva cuenta */}
         <div className="text-center mt-4">
           <p className="text-sm text-gray-600">Don't have an account?</p>
           <button
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate("/signup")} // Redirigimos al formulario de registro.
             className="mt-2 py-2 px-4 bg-indigo-500 text-white font-semibold rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Sign up
